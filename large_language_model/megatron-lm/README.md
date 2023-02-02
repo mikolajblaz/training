@@ -132,14 +132,15 @@ E.g. for a model with 96 transformer layers, the array corresponding to the self
 
 #### Metadata
 All non-parameters data is stored in a `common.pt` torch file and contains framework specific information.
-An example content of a Megatron specific common.pt file is presented in `scripts/common_bf16.pt` file.
+An example content of a Megatron specific common.pt file is presented in `scripts/common_bf16.json` file.
 
 Apart from that the checkpoint metadata is stored in `metadata.json` file.
 
 
 ### Zarr format
 Each parameter is stored in a separate directory as a [Zarr](https://zarr.readthedocs.io/) array to allow parallel access.
-The content of the directories should be manipulated only with Zarr or Zarr-compatible libraries such as [TensorStore](https://google.github.io/tensorstore/).
+The content of a single directory is an array fragmented into multiple files (e.g. `0.0`, `0.1`, ...) and should be manipulated
+only with Zarr or Zarr-compatible libraries such as [TensorStore](https://google.github.io/tensorstore/).
 
 Megatron features a small library in `megatron.core.dist_checkpointing` that builds on the Zarr and TensorStore primitives
 and allows operating on arrays split into different devices (in tensor or pipeline parallel groups).
